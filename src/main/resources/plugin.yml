@@ -1,0 +1,6 @@
+name: ModuleLoader
+version: '${project.version}'
+main: io.github.jefflegendpower.moduleloader.ModuleLoader
+depend: [ kotlin-stdlib ]
+authors: [ JeffLegendPower ]
+description: load modules no more super huge jars!!
