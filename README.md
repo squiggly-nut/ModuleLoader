@@ -16,4 +16,5 @@ https://www.spigotmc.org/resources/kotlin-stdlib.80808/
 ### Downloading modules
 * To download a jar from the internet, you only need to put the url where the file is located
 ![Code example of downloading a module](https://user-images.githubusercontent.com/80235181/189542578-c2f6f313-7a65-4450-9c69-24abd24dd466.png)
-* Note: it will overwrite the old file
+* Note: It will overwrite the old file
+* Another note: You will still need to load the module
