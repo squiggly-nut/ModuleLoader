@@ -12,12 +12,12 @@ import java.util.logging.Logger
 /**
  * @author JeffLegendPower
  * @param logger The logger to use (preferably the plugin's logger)
- * @paramm moduleFolder
+ * @param classLoader The plugin's class loader (the classloader can be found from plugin.getClassLoader())
  */
 class Loader(private val logger: Logger, private val classLoader: ClassLoader) {
 
     private val loadedModules = mutableListOf<String>()
-    private val moduleFolder: File = File(ModuleLoader.getPlugin(ModuleLoader::class.java).dataFolder, "modules")
+    private fun modulesFolder(): File = ModuleLoader.getInstance().modulesFolder
 
     private val ADD_URL_METHOD: Supplier<Method> = Suppliers.memoize {
         try {
@@ -30,8 +30,8 @@ class Loader(private val logger: Logger, private val classLoader: ClassLoader) {
     }
 
     init {
-        if (!moduleFolder.exists()) {
-            moduleFolder.mkdir()
+        if (!modulesFolder().exists()) {
+            modulesFolder().mkdir()
         }
     }
 
@@ -40,10 +40,10 @@ class Loader(private val logger: Logger, private val classLoader: ClassLoader) {
      * overwrites if the module already exists
      */
     fun newModule(file: File) {
-        if (file.parentFile != moduleFolder) {
-            logger.info("Moving module ${file.name} to the ${moduleFolder.name} directory")
-            val module = File(moduleFolder, file.name)
-            if (module.exists()) logger.info("Module ${file.name} already exists in the ${moduleFolder.name} directory, overwriting...")
+        if (file.parentFile != modulesFolder()) {
+            logger.info("Moving module ${file.name} to the ${modulesFolder().name} directory")
+            val module = File(modulesFolder(), file.name)
+            if (module.exists()) logger.info("Module ${file.name} already exists in the ${modulesFolder().name} directory, overwriting...")
             file.copyTo(module, overwrite = true)
         }
     }
@@ -77,7 +77,7 @@ class Loader(private val logger: Logger, private val classLoader: ClassLoader) {
     }
 
     private fun getModule(name: String): File? {
-        val modules = moduleFolder.listFiles() ?: return null
+        val modules = modulesFolder().listFiles() ?: return null
         for (module in modules) {
             if (module.isFile && module.name == name) {
                 return module
